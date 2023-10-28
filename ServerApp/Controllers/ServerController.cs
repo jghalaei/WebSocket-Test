@@ -1,21 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Net.WebSockets;
 using Microsoft.AspNetCore.Mvc;
-using speed.Handlers;
+using ServerApp;
+using ServerApp.Handlers;
 
 namespace speed.Controllers
 {
     [ApiController]
     public class ServerController : ControllerBase
     {
-        private IWebSocketHandler _webSocketHandler;
-
-        public ServerController(IWebSocketHandler webSocketHandler)
-        {
-            _webSocketHandler = webSocketHandler;
-        }
         [HttpGet("/")]
         public async Task<IActionResult> Get()
         {
@@ -24,29 +16,38 @@ namespace speed.Controllers
         [HttpGet("/messages")]
         public async Task GetSocket()
         {
-            await _webSocketHandler.HandleWebSocketAsync(HttpContext);
+            if (HttpContext.WebSockets.IsWebSocketRequest)
+            {
+                WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
+                var clientId = Guid.NewGuid().ToString();
+                WsSession wsSession = new WsSession(clientId, webSocket);
+                var socketFinishedTask = new TaskCompletionSource<object>();
+                BackgroundSocketProcessor.AddSession(wsSession, socketFinishedTask);
+
+                await socketFinishedTask.Task;
+            }
         }
         [HttpPost("/ping")]
-        public async Task<IActionResult> Ping()
+        public async Task<IActionResult> Ping([FromHeader] string ClientId)
         {
-            if (await _webSocketHandler.SendWebSocketMessageAsync(HttpContext.Session.Id, "Pong"))
-                return Ok();
-            return NotFound("Connection not found");
+            WsSession? wsSession = WsSession.GetSession(ClientId);
+            if (wsSession == null)
+                return NotFound("Connection not found");
+            await wsSession.SendMessageAsync("Pong");
+            return Ok();
         }
-
         [HttpPost("work/start")]
-        public async Task<IActionResult> StartWork()
+        public async Task<IActionResult> StartWork([FromHeader] string ClientId)
         {
-            try
-            {
-                Work work = new Work(HttpContext.Session.Id, _webSocketHandler);
-                await work.StartAsync();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            WsSession? wsSession = WsSession.GetSession(ClientId);
+            if (wsSession == null)
+                return NotFound("Connection not found");
+
+            int workId = new Random().Next(10000, 99999);
+            await wsSession.SendMessageAsync("workStarted, ID: " + workId);
+            await Task.Delay(TimeSpan.FromSeconds(new Random().Next(1, 5)));
+            await wsSession.SendMessageAsync("workFinished, ID: " + workId);
+            return Ok();
         }
     }
 }
