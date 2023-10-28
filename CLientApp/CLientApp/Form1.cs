@@ -42,5 +42,15 @@ namespace CLientApp
             lstItems.Items.Add($"{sender}: {message}");
 
         }
+
+        private void btnPing_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnStartWork_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
