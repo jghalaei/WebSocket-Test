@@ -16,7 +16,7 @@ internal class Program
             KeepAliveInterval = TimeSpan.FromMinutes(5),
         };
         app.UseWebSockets(VerSocketOptions);
-        //app.UseMiddleware<WebSocketMiddleware>();
+
         app.MapControllers();
 
         app.Run();
