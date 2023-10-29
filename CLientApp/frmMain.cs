@@ -58,7 +58,7 @@ namespace CLientApp
         private void SetUIButtons(bool isConnected)
         {
             btnConnect.Enabled = !isConnected;
-            btnPing.Enabled = btnStartWork.Enabled  = isConnected;
+            btnPing.Enabled = btnStartWork.Enabled=btnDisconnect.Enabled  = isConnected;
             if (isConnected)
                 SaveHostUrl();
         }
@@ -82,27 +82,39 @@ namespace CLientApp
                         lstItems.Items.Add($"Server: {Encoding.UTF8.GetString(buffer)}");
                         lstItems.SelectedIndex = lstItems.Items.Count - 1;
                     }
-
                 }
             }
-            
             catch(Exception ex)
             {
-                if (socket?.State == WebSocketState.Closed)
-                    SetUIButtons(false);
-               else 
+               // if (socket?.State == WebSocketState.Closed)
+               //     SetUIButtons(false);
+               //else 
                     MessageBox.Show(ex.Message);
             }
         }
-
         private async void btnPing_Click(object sender, EventArgs e)
+        {
+            await PostAsync("ping");
+        }
+
+        private async void btnStartWork_Click(object sender, EventArgs e)
+        {
+            await PostAsync("work/start");
+        }
+
+        private async void btnDisconnect_Click(object sender, EventArgs e)
+        {
+            await PostAsync("close");
+        }
+        private async Task PostAsync(string route)
         {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("ClientId", ClientId);
-            AddLog("Send Ping Request");
-            var result = await client.PostAsync($"http://{txtHost.Text}/ping", null);
+            AddLog($"Sending request to {route}");
+            var result = await client.PostAsync($"http://{txtHost.Text}/{route}", null);
             AddLog("Server Responded with code: " + result.StatusCode.ToString());
         }
+
 
         private void AddLog(string log)
         {
@@ -112,18 +124,14 @@ namespace CLientApp
                
         }
 
-        private async void btnStartWork_Click(object sender, EventArgs e)
+        private void frmMain_Load(object sender, EventArgs e)
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Add("ClientId", ClientId);
-            AddLog("Sending work/start request");
-            var result = await client.PostAsync($"http://{txtHost.Text}/work/start", null);
-            AddLog("Server Responded with code: " + result.StatusCode.ToString());
+            SetUIButtons(false);
         }
 
-        private void splitContainer_SplitterMoved(object sender, SplitterEventArgs e)
+        private async void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            await PostAsync("close");
         }
     }
 }

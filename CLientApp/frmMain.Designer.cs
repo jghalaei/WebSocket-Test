@@ -33,6 +33,7 @@
             this.lstItems = new System.Windows.Forms.ListBox();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnDisconnect = new System.Windows.Forms.Button();
             this.btnStartWork = new System.Windows.Forms.Button();
             this.btnPing = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -54,7 +55,7 @@
             this.panel1.Controls.Add(this.splitContainer);
             this.panel1.Location = new System.Drawing.Point(12, 138);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(526, 363);
+            this.panel1.Size = new System.Drawing.Size(541, 363);
             this.panel1.TabIndex = 0;
             // 
             // splitContainer
@@ -71,10 +72,9 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.lstLog);
-            this.splitContainer.Size = new System.Drawing.Size(526, 363);
+            this.splitContainer.Size = new System.Drawing.Size(541, 363);
             this.splitContainer.SplitterDistance = 252;
             this.splitContainer.TabIndex = 7;
-            this.splitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_SplitterMoved);
             // 
             // lstItems
             // 
@@ -83,7 +83,7 @@
             this.lstItems.ItemHeight = 20;
             this.lstItems.Location = new System.Drawing.Point(0, 0);
             this.lstItems.Name = "lstItems";
-            this.lstItems.Size = new System.Drawing.Size(526, 252);
+            this.lstItems.Size = new System.Drawing.Size(541, 252);
             this.lstItems.TabIndex = 3;
             // 
             // lstLog
@@ -94,13 +94,14 @@
             this.lstLog.ItemHeight = 20;
             this.lstLog.Location = new System.Drawing.Point(0, 0);
             this.lstLog.Name = "lstLog";
-            this.lstLog.Size = new System.Drawing.Size(526, 107);
+            this.lstLog.Size = new System.Drawing.Size(541, 107);
             this.lstLog.TabIndex = 6;
             // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.btnDisconnect);
             this.groupBox2.Controls.Add(this.btnStartWork);
             this.groupBox2.Controls.Add(this.btnPing);
             this.groupBox2.Controls.Add(this.label1);
@@ -108,15 +109,27 @@
             this.groupBox2.Controls.Add(this.btnConnect);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(526, 120);
+            this.groupBox2.Size = new System.Drawing.Size(541, 120);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
+            // 
+            // btnDisconnect
+            // 
+            this.btnDisconnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDisconnect.Enabled = false;
+            this.btnDisconnect.Location = new System.Drawing.Point(424, 79);
+            this.btnDisconnect.Name = "btnDisconnect";
+            this.btnDisconnect.Size = new System.Drawing.Size(111, 31);
+            this.btnDisconnect.TabIndex = 3;
+            this.btnDisconnect.Text = "Disconnect";
+            this.btnDisconnect.UseVisualStyleBackColor = true;
+            this.btnDisconnect.Click += new System.EventHandler(this.btnDisconnect_Click);
             // 
             // btnStartWork
             // 
             this.btnStartWork.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStartWork.Enabled = false;
-            this.btnStartWork.Location = new System.Drawing.Point(409, 79);
+            this.btnStartWork.Location = new System.Drawing.Point(307, 79);
             this.btnStartWork.Name = "btnStartWork";
             this.btnStartWork.Size = new System.Drawing.Size(111, 31);
             this.btnStartWork.TabIndex = 2;
@@ -128,7 +141,7 @@
             // 
             this.btnPing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPing.Enabled = false;
-            this.btnPing.Location = new System.Drawing.Point(292, 79);
+            this.btnPing.Location = new System.Drawing.Point(190, 79);
             this.btnPing.Name = "btnPing";
             this.btnPing.Size = new System.Drawing.Size(111, 31);
             this.btnPing.TabIndex = 1;
@@ -151,7 +164,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtHost.Location = new System.Drawing.Point(6, 46);
             this.txtHost.Name = "txtHost";
-            this.txtHost.Size = new System.Drawing.Size(514, 27);
+            this.txtHost.Size = new System.Drawing.Size(529, 27);
             this.txtHost.TabIndex = 1;
             // 
             // btnConnect
@@ -169,12 +182,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(550, 527);
+            this.ClientSize = new System.Drawing.Size(565, 527);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox2);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "WebSocket Client";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
+            this.Load += new System.EventHandler(this.frmMain_Load);
             this.panel1.ResumeLayout(false);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
@@ -198,5 +213,6 @@
         private Button btnConnect;
         private ListBox lstLog;
         private SplitContainer splitContainer;
+        private Button btnDisconnect;
     }
 }

@@ -11,14 +11,6 @@ namespace ServerApp.Handlers
     public class WsSession
     {
         private static Dictionary<string, WsSession> activeSessions = new Dictionary<string, WsSession>();
-        public string ClientId { get; set; }
-        public WebSocket WsSocket { get; set; }
-        public WsSession(string clientId, WebSocket wsSocket)
-        {
-            ClientId = clientId;
-            WsSocket = wsSocket;
-
-        }
         public static WsSession? GetSession(string clientId)
         {
             if (activeSessions.ContainsKey(clientId))
@@ -28,32 +20,69 @@ namespace ServerApp.Handlers
             return null;
         }
 
-        public async Task Start()
+        private string _clientId;
+        private WebSocket _wsSocket;
+        private TaskCompletionSource<int> _tcsCompletionSource;
+        private ILogger<WsSession> _logger;
+        public WsSession(string clientId, WebSocket wsSocket, ILogger<WsSession> logger)
         {
-            activeSessions.Add(ClientId, this);
-            await SendMessageAsync(ClientId);
-            await SendMessageAsync("Wellcome");
+            _clientId = clientId;
+            _wsSocket = wsSocket;
+            _logger = logger;
         }
-
+        public async Task StartAsync()
+        {
+            activeSessions.Add(_clientId, this);
+            await SendMessageAsync(_clientId);
+            await SendMessageAsync("Wellcome");
+            _tcsCompletionSource = new TaskCompletionSource<int>();
+      
+            await _tcsCompletionSource.Task;
+        }
 
         public async Task SendMessageAsync(string message)
         {
             try
             {
-                Byte[] buffer = Encoding.UTF8.GetBytes(message);
-                await WsSocket.SendAsync(
-                    new ArraySegment<byte>(buffer, 0, buffer.Length),
-                    WebSocketMessageType.Text,
-                    false,
-                    CancellationToken.None
-                );
+                if (_wsSocket.State == WebSocketState.Open)
+                {
+                    Byte[] buffer = Encoding.UTF8.GetBytes(message);
+                    await _wsSocket.SendAsync(
+                        new ArraySegment<byte>(buffer, 0, buffer.Length),
+                        WebSocketMessageType.Text,
+                        false,
+                        CancellationToken.None
+                    );
+                    _logger.LogInformation("WebSocket Message sent: " + message);
+                }
             }
-            catch(WebSocketException)
+            catch (WebSocketException ex)
             {
-                activeSessions.Remove(ClientId);
-                Console.WriteLine($"connection to {ClientId} removed");
+                _logger.LogError(ex.Message);
+                if (activeSessions.ContainsKey(_clientId))
+                    activeSessions.Remove(_clientId);
+                _tcsCompletionSource.SetResult(1);
+                _logger.LogInformation($"connection to {_clientId} removed");
             }
         }
-    
+        public async Task DisconnectAsync()
+        {
+            try
+            {
+                if (_wsSocket.State == WebSocketState.Open)
+                {
+                    await _wsSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Disconnect Requested", CancellationToken.None);
+                    _logger.LogInformation("Close Handshake Sent");
+                }
+            }
+            finally
+            {
+                if (activeSessions.ContainsKey(_clientId))
+                    activeSessions.Remove(_clientId);
+                _tcsCompletionSource.SetResult(1);
+            }
+
+        }
+
     }
 }
