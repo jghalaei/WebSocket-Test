@@ -38,13 +38,22 @@ namespace ServerApp.Handlers
 
         public async Task SendMessageAsync(string message)
         {
-            Byte[] buffer = Encoding.UTF8.GetBytes(message);
-            await WsSocket.SendAsync(
-                new ArraySegment<byte>(buffer, 0, buffer.Length),
-                WebSocketMessageType.Text,
-                false,
-                CancellationToken.None
-            );
+            try
+            {
+                Byte[] buffer = Encoding.UTF8.GetBytes(message);
+                await WsSocket.SendAsync(
+                    new ArraySegment<byte>(buffer, 0, buffer.Length),
+                    WebSocketMessageType.Text,
+                    false,
+                    CancellationToken.None
+                );
+            }
+            catch(WebSocketException)
+            {
+                activeSessions.Remove(ClientId);
+                Console.WriteLine($"connection to {ClientId} removed");
+            }
         }
+    
     }
 }
