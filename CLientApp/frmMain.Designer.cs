@@ -54,7 +54,7 @@
             this.panel1.Controls.Add(this.splitContainer);
             this.panel1.Location = new System.Drawing.Point(12, 138);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(741, 329);
+            this.panel1.Size = new System.Drawing.Size(526, 363);
             this.panel1.TabIndex = 0;
             // 
             // splitContainer
@@ -71,8 +71,8 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.lstLog);
-            this.splitContainer.Size = new System.Drawing.Size(741, 329);
-            this.splitContainer.SplitterDistance = 229;
+            this.splitContainer.Size = new System.Drawing.Size(526, 363);
+            this.splitContainer.SplitterDistance = 252;
             this.splitContainer.TabIndex = 7;
             this.splitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitContainer_SplitterMoved);
             // 
@@ -83,7 +83,7 @@
             this.lstItems.ItemHeight = 20;
             this.lstItems.Location = new System.Drawing.Point(0, 0);
             this.lstItems.Name = "lstItems";
-            this.lstItems.Size = new System.Drawing.Size(741, 229);
+            this.lstItems.Size = new System.Drawing.Size(526, 252);
             this.lstItems.TabIndex = 3;
             // 
             // lstLog
@@ -94,7 +94,7 @@
             this.lstLog.ItemHeight = 20;
             this.lstLog.Location = new System.Drawing.Point(0, 0);
             this.lstLog.Name = "lstLog";
-            this.lstLog.Size = new System.Drawing.Size(741, 96);
+            this.lstLog.Size = new System.Drawing.Size(526, 107);
             this.lstLog.TabIndex = 6;
             // 
             // groupBox2
@@ -108,7 +108,7 @@
             this.groupBox2.Controls.Add(this.btnConnect);
             this.groupBox2.Location = new System.Drawing.Point(12, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(741, 120);
+            this.groupBox2.Size = new System.Drawing.Size(526, 120);
             this.groupBox2.TabIndex = 5;
             this.groupBox2.TabStop = false;
             // 
@@ -116,7 +116,7 @@
             // 
             this.btnStartWork.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStartWork.Enabled = false;
-            this.btnStartWork.Location = new System.Drawing.Point(624, 79);
+            this.btnStartWork.Location = new System.Drawing.Point(409, 79);
             this.btnStartWork.Name = "btnStartWork";
             this.btnStartWork.Size = new System.Drawing.Size(111, 31);
             this.btnStartWork.TabIndex = 2;
@@ -128,7 +128,7 @@
             // 
             this.btnPing.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPing.Enabled = false;
-            this.btnPing.Location = new System.Drawing.Point(507, 79);
+            this.btnPing.Location = new System.Drawing.Point(292, 79);
             this.btnPing.Name = "btnPing";
             this.btnPing.Size = new System.Drawing.Size(111, 31);
             this.btnPing.TabIndex = 1;
@@ -151,7 +151,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtHost.Location = new System.Drawing.Point(6, 46);
             this.txtHost.Name = "txtHost";
-            this.txtHost.Size = new System.Drawing.Size(729, 27);
+            this.txtHost.Size = new System.Drawing.Size(514, 27);
             this.txtHost.TabIndex = 1;
             // 
             // btnConnect
@@ -169,7 +169,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(765, 493);
+            this.ClientSize = new System.Drawing.Size(550, 527);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.groupBox2);
             this.Name = "frmMain";
