@@ -10,7 +10,7 @@ namespace speed.Controllers
     public class ServerController : ControllerBase
     {
         [HttpGet("/")]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
             return Ok("Hello World");
         }
@@ -41,7 +41,7 @@ namespace speed.Controllers
             return Ok();
         }
         [HttpPost("work/start")]
-        public async Task<IActionResult> StartWork([FromHeader] string ClientId)
+        public  IActionResult StartWork([FromHeader] string ClientId)
         {
             if (String.IsNullOrEmpty(ClientId))
                 return BadRequest("ClientId is not valid");

@@ -12,8 +12,8 @@ namespace CLientApp
     public partial class frmMain : Form
     {
         string fileName = $"{Application.StartupPath}/host.txt";
-        private ClientWebSocket socket;
-        private string ClientId;
+        private ClientWebSocket? socket;
+        private string ClientId="";
         public frmMain()
         {
             InitializeComponent();
@@ -67,7 +67,7 @@ namespace CLientApp
         {
             try
             {
-                while (socket.State == WebSocketState.Open)
+                while (socket!=null && socket.State == WebSocketState.Open)
                 {
                     var buffer = new Byte[1024 * 4];
                     var result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
@@ -88,7 +88,7 @@ namespace CLientApp
             
             catch(Exception ex)
             {
-                if (socket.State == WebSocketState.Closed)
+                if (socket?.State == WebSocketState.Closed)
                     SetUIButtons(false);
                else 
                     MessageBox.Show(ex.Message);
